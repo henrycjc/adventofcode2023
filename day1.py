@@ -1,7 +1,9 @@
+import re
+
+
 def get_data() -> list[str]:
-    data = """sixsrvldfour4seven
-    snip snip"""
-    return [row.strip() for row in data.split("\n")]
+    with open("day1_input.txt", mode="r") as file:
+        return [row.strip() for row in file]
 
 
 if __name__ == "__main__":
@@ -10,22 +12,12 @@ if __name__ == "__main__":
         data = get_data()
         total = 0
         for row in data:
-            row_vals = []
-            for c in row:
-                if c.isdigit():
-                    row_vals.append(c)
-            first = row_vals[0]
-            last = row_vals[-1]
-            print(
-                f"{row} contains {row_vals} which has first val {row_vals[0]} and last val {row_vals[-1]} for total {first + last}"
-            )
-            val = int(f"{first + last}")
-            total += val
+            row_vals = [c for c in row if c.isdigit()]
+            total += int(f"{row_vals[0] + row_vals[-1]}")
+        assert total == 54561, "Day1, Q1 wrong"
         print(total)
 
-    # day1()
-
-    import re
+    day1()
 
     def day1_question2():
         data = get_data()
@@ -43,22 +35,15 @@ if __name__ == "__main__":
         }
         for row in data:
             row_vals = []
-            match: re.Match
             for match in re.findall(
                 r"one|two|three|four|five|six|seven|eight|nine|ten|\d", row
             ):
-                match_str = str(match)
-                if match_str.isdigit():
-                    row_vals.append(int(match_str))
+                if match.isdigit():
+                    row_vals.append(int(match))
                 else:
-                    row_vals.append(digit_map[match_str])
-            first = row_vals[0]
-            last = row_vals[-1]
-            print(
-                f"{row} contains {row_vals} which has first val {row_vals[0]} and last val {row_vals[-1]} for total {str(first) + str(last)}"
-            )
-            val = int(f"{str(first) + str(last)}")
-            total += val
+                    row_vals.append(digit_map[match])
+            total += int(f"{str(row_vals[0]) + str(row_vals[-1])}")
+        assert total == 54076, "Day1,Q2"
         print(total)
 
     day1_question2()
